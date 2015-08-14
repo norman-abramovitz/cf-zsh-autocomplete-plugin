@@ -2,6 +2,10 @@
 
 This [zsh](http://www.zsh.org/) plugin adds autocompletion options for all [Cloud Foundry CLI](http://docs.cloudfoundry.org/devguide/installcf/) commands.
 
+## Demo
+
+[![asciicast demo](https://asciinema.org/a/1twq9fo0bazyjtyiln88o9d0u.png)](https://asciinema.org/a/1twq9fo0bazyjtyiln88o9d0u) by [@shinji62](https://github.com/shinji62)
+
 ## Installation
 
 * Download the latest version of the [Cloud Foundry CLI](https://github.com/cloudfoundry/cli#downloads)
