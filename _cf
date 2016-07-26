@@ -659,7 +659,7 @@ __plugins() {
 
 __install-plugin() {
   _arguments \
-    '1:plugin URL or path:' \
+    '1:plugin URL or path:_files' \
     '-r=[repo name where the plugin binary is located]:repo name:__cf_repo_plugins'
 }
 
