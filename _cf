@@ -544,10 +544,10 @@ __buildpacks() {
 __create-buildpack() {
   _arguments \
     '1:buildpack name:' \
-    '2:path:_files' \
-    '3:position:'
-    '--enable[Enable the buildpack to be used for staging]' \
-    '--disable[Disable the buildpack from being used for staging]'
+    # '-p=[Path to directory or zip file]:file:_files' \
+    # '3:position:' \
+    # # '--enable[Enable the buildpack to be used for staging]' \
+    # '--disable[Disable the buildpack from being used for staging]'
 }
 
 __update-buildpack() {
