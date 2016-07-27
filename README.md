@@ -17,7 +17,7 @@ This [zsh](http://www.zsh.org/) plugin adds autocompletion options for all [Clou
 
 ```
 $ cd ~/.oh-my-zsh/plugins
-$ git clone https://github.com/frodenas/cf-zsh-autocomplete-plugin.git cf
+$ git clone https://github.com/dannyzen/cf-zsh-autocomplete-plugin.git cf
 ```
 
 * Add the `cf` plugin to your `.zshrc` file:
@@ -29,7 +29,7 @@ plugins=(... cf)
 ### Antigen, Antigen-hs, Antibody
 
 ```
-antigen bundle frodenas/cf-zsh-autocomplete-plugin
+antigen bundle dannyzen/cf-zsh-autocomplete-plugin
 ```
 
 ## Contributing
@@ -45,11 +45,11 @@ Here are some ways *you* can contribute:
 * by writing specifications
 * by writing code (**no patch is too small**: fix typos, add comments, clean up inconsistent whitespace)
 * by refactoring code
-* by closing [issues](https://github.com/frodenas/cf-zsh-autocomplete-plugin/issues)
+* by closing [issues](https://github.com/dannyzen/cf-zsh-autocomplete-plugin/issues)
 * by reviewing patches
 
 ### Submitting an Issue
-We use the [GitHub issue tracker](https://github.com/frodenas/cf-zsh-autocomplete-plugin/issues) to track bugs and features.
+We use the [GitHub issue tracker](https://github.com/dannyzen/cf-zsh-autocomplete-plugin/issues) to track bugs and features.
 Before submitting a bug report or feature request, check to make sure it hasn't already been submitted. You can indicate
 support for an existing issue by voting it up. When submitting a bug report, please include a
 [Gist](http://gist.github.com/) that includes a stack trace and any details that may be necessary to reproduce the bug,
@@ -66,4 +66,4 @@ including your gem version, Ruby version, and operating system. Ideally, a bug r
 
 ## Copyright
 
-Copyright (c) 2015 Ferran Rodenas. See [LICENSE](https://github.com/frodenas/cf-zsh-autocomplete-plugin/blob/master/LICENSE) for details.
+Copyright (c) 2015 Ferran Rodenas. See [LICENSE](https://github.com/dannyzen/cf-zsh-autocomplete-plugin/blob/master/LICENSE) for details.
