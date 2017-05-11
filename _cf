@@ -152,8 +152,8 @@ __login() {
     '-a=[API endpoint (e.g. https://api.example.com)]:api endpoint:' \
     '-u=[Username]:username:' \
     '-p=[Password]:password:' \
-    '-o=[Organization]:organization name:' \
-    '-s=[Space]:space name:' \
+    '-o=[Organization]:organization name:__cf_orgs' \
+    '-s=[Space]:space name:__cf_spaces' \
     '--sso[Use a one-time password to login]' \
     '--skip-ssl-validation[Skip SSL validation]'
 }
@@ -196,8 +196,8 @@ __app() {
 
 __push() {
   _arguments \
-    '1:application name:' \
-    '-b=[Custom buildpack by name (e.g. my-buildpack) or GIT URL or GIT BRANCH URL]' \
+    '1:application name:__cf_apps' \
+    '-b=[Custom buildpack by name (e.g. my-buildpack) or GIT URL or GIT BRANCH URL]:buildpack name:__cf_buildpacks' \
     '-c=[Startup command, set to null to reset to default start command]:startup command:' \
     '-d=[Domain (e.g. example.com)]:domain (e.g. example.com):__cf_domains' \
     '-f=[Path to manifest]:file:_files:' \
