@@ -230,7 +230,10 @@ __cf7_cmd_apps() {
 __cf7_cmd_app() {
   _arguments \
     '1:application name:__cf7_apps' \
-    '--guid[Retrieve and display the given app guid. All other health and status output for the app is suppressed]'
+    '--guid[Retrieve and display the given app guid. All other health and status output for the app is suppressed]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
 }
 
 __cf7_cmd_push() {
@@ -979,6 +982,29 @@ __cf7_cmd_allow-space-ssh() {
     '-help[Show CF command help]' \
     '--help[Show CF command help]'
 }
+__cf7_cmd_disallow-space-ssh() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_enable-ssh() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_disable-ssh() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
 
 # ------------------
 # ----- end Commands
@@ -1084,6 +1110,9 @@ _1st_arguments=(
   "delete-target":"Delete a saved target (requires cf-targets plugin)" 
   "version":"Show command version" 
   "allow-space-ssh":"Allow SSH access for the space" 
+  "disallow-space-ssh":"Disallow SSH access for the space" 
+  "enable-ssh":"Enable ssh for the application" 
+  "disable-ssh":"Disable ssh for the application" 
 )
 
 # -----------------------
@@ -1291,4 +1320,10 @@ case "$words[1]" in
     __cf7_cmd_delete-target ;;
   allow-space-ssh)
     __cf7_cmd_allow-space-ssh ;;
+  disallow-space-ssh)
+    __cf7_cmd_disallow-space-ssh ;;
+  enable-ssh)
+    __cf7_cmd_enable-ssh ;;
+  disable-ssh)
+    __cf7_cmd_disable-ssh ;;
 esac
