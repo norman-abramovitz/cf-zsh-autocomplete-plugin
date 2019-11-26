@@ -965,6 +965,13 @@ __cf7_cmd_delete-target() {
     '--help[Show CF command help]'
 }
 
+__cf7_cmd_version() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
 # ------------------
 # ----- end Commands
 # ------------------
@@ -1067,6 +1074,7 @@ _1st_arguments=(
   "save-target":"Save the current target under a given name (requires cf-targets plugin)"
   "set-target":"Restore a previously saved target (requires cf-targets plugin)"
   "delete-target":"Delete a saved target (requires cf-targets plugin)" 
+  "version":"Show command version" 
 )
 
 # -----------------------
@@ -1087,6 +1095,8 @@ _arguments -C \
   '-help[Show CF command help]' \
   '--help[Show CF command help]' \
   '-v[Print API request diagnostics to stdou]' \
+  '--version[Show command version]' \
+  '-v[Show command version]' \
   '1: :__commands' \
   '*::arg:->args'
 
