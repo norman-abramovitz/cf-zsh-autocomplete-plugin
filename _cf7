@@ -972,6 +972,14 @@ __cf7_cmd_version() {
     '--help[Show CF command help]'
 }
 
+__cf7_cmd_allow-space-ssh() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
 # ------------------
 # ----- end Commands
 # ------------------
@@ -1075,6 +1083,7 @@ _1st_arguments=(
   "set-target":"Restore a previously saved target (requires cf-targets plugin)"
   "delete-target":"Delete a saved target (requires cf-targets plugin)" 
   "version":"Show command version" 
+  "allow-space-ssh":"Allow SSH access for the space" 
 )
 
 # -----------------------
@@ -1280,4 +1289,6 @@ case "$words[1]" in
     __cf7_cmd_set-target ;;
   delete-target)
     __cf7_cmd_delete-target ;;
+  allow-space-ssh)
+    __cf7_cmd_allow-space-ssh ;;
 esac
