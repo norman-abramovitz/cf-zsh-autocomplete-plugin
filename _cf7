@@ -1,0 +1,1329 @@
+#compdef cf7
+# ------------------------------------------------------------------------------
+#
+# Copyright 2015 Ferran Rodenas
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# ------------------------------------------------------------------------------
+#
+# Description
+# -----------
+#
+#  Completion script for Cloud Foundry CLI (https://github.com/cloudfoundry/cli#downloads)
+#
+# ------------------------------------------------------------------------------
+#
+# Authors
+# -------
+#
+#  * Ferran Rodenas (https://github.com/frodenas)
+#
+# ------------------------------------------------------------------------------
+
+# ----------------------
+# ----- Helper functions
+# ----------------------
+
+# Output a selectable list of organizations
+__cf7_orgs() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf orgs | awk 'NR>3{print $1}'))
+    if [[ 'X$cont_cmd' != 'X' ]]
+        _describe 'ORG' cont_cmd
+}
+
+# Output a selectable list of spaces
+__cf7_spaces() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf spaces | awk 'NR>3{print $1}'))
+    if [[ 'X$cont_cmd' != 'X' ]]
+        _describe 'SPACE' cont_cmd
+}
+
+# Output a selectable list of applications
+__cf7_apps() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf apps | awk 'NR>4{print $1}'))
+    if [[ 'X$cont_cmd' != 'X' ]]
+        _describe 'APP' cont_cmd
+}
+
+# Output a selectable list of stacks
+__cf7_stacks() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf stacks | awk 'NR>4{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'STACK' cont_cmd
+}
+
+# Output a selectable list of services
+__cf7_marketplace_services() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf marketplace | awk 'NR>4{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'SERVICE' cont_cmd
+}
+
+# Output a selectable list of services
+__cf7_services() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf services | awk 'NR>4{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'SERVICE' cont_cmd
+}
+
+# Output a selectable list of domains
+__cf7_domains() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf domains | grep -v shared | awk 'NR>2{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'DOMAIN' cont_cmd
+}
+
+# Output a selectable list of shared domains
+__cf7_shared_domains() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf domains | grep -v owned | awk 'NR>2{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'SHARED-DOMAIN' cont_cmd
+}
+
+# Output a selectable list of hostnames
+__cf7_hostnames() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf routes | awk 'NR>3{print $2}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'ROUTE' cont_cmd
+}
+
+# Output a selectable list of buildpacks
+__cf7_buildpacks() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf buildpacks | awk 'NR>3{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'BUILDPACK' cont_cmd
+}
+
+# Output a selectable list of feature flags
+__cf7_feature_flags() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf feature-flags | awk 'NR>4{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'FEATURE-FLAG' cont_cmd
+}
+
+# Output a selectable list of plugin repos
+__cf7_repo_plugins() {
+    declare -a cont_cmd
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf list-plugin-repos | awk 'NR>3{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'REPO-PLUGIN' cont_cmd
+}
+
+# Output a selectable list of plugins
+__cf7_plugins() {
+    declare -a cont_cmd
+    cont_cmd=($(cf plugins | awk 'NR>4{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'PLUGIN' cont_cmd
+}
+
+# Output a selectable list of targets (requires cf-targets plugin)
+__cf7_targets() {
+    declare -a cont_cmd
+    cont_cmd=($(cf targets | awk '{print $1}'))
+    if [[  'X$cont_cmd' != 'X' ]]
+        _describe 'TARGET' cont_cmd
+}
+
+
+# --------------------------
+# ----- end Helper functions
+# --------------------------
+
+# --------------
+# ----- Commands
+# --------------
+
+__cf7_cmd_login() {
+  _arguments \
+    '-a=[API endpoint (e.g. https://api.example.com)]:api endpoint:' \
+    '-u=[Username]:username:' \
+    '-p=[Password]:password:' \
+    '-o=[Organization]:organization name:__cf7_orgs' \
+    '-s=[Space]:space name:__cf7_spaces' \
+    '--sso[Use a one-time password to login]' \
+    '--skip-ssl-validation[Skip SSL validation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_logout() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_help() {
+  _arguments \
+    '1::Command:' \
+    '-a[List all commands]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_passwd() {
+  _arguments \
+    '1:password:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_target() {
+  _arguments \
+    '-o=[Organization]:organization name:__cf7_orgs' \
+    '-s=[Space]:space name:__cf7_spaces' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_api() {
+  _arguments \
+    '1:API url:' \
+    '--unset[Remove all api endpoint targeting]' \
+    '--skip-ssl-validation[Skip SSL validation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_auth() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_apps() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_app() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '--guid[Retrieve and display the given app guid. All other health and status output for the app is suppressed]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_push() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-b=[Custom buildpack by name (e.g. my-buildpack) or GIT URL or GIT BRANCH URL]:buildpack name:__cf7_buildpacks' \
+    '-c=[Startup command, set to null to reset to default start command]:startup command:' \
+    '-d=[Domain (e.g. example.com)]:domain (e.g. example.com):__cf7_domains' \
+    '-f=[Path to manifest]:file:_files:' \
+    '-i=[Number of instances]:number of instances:' \
+    '-k=[Disk limit (e.g. 256M, 1024M, 1G)]:disk limit (e.g. 256M, 1024M, 1G):' \
+    '-m=[Memory limit (e.g. 256M, 1024M, 1G)]:memory limit (e.g. 256M, 1024M, 1G):' \
+    '-n=[Hostname (e.g. my-subdomain)]:hostname (e.g. my-subdomain):' \
+    '-p=[Path to app directory or to a zip file of the contents of the app directory]:file:_files' \
+    '-s=[Stack to use (a stack is a pre-built file system, including an operating system, that can run apps)]:stack name:__cf7_stacks:' \
+    '-t=[Maximum time (in seconds) for CLI to wait for application start, other server side timeouts may apply]:maximum time (in seconds):' \
+    '--no-hostname[Map the root domain to this app]' \
+    '--no-manifest[Ignore manifest file]' \
+    '--no-route[Do not map a route to this app and remove routes from previous pushes of this app]' \
+    '--no-start[Do not start an app after pushing]' \
+    '--random-route[Create a random route for this app]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_scale() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-i=[Number of instances]:number of instances:' \
+    '-k=[Disk limit (e.g. 256M, 1024M, 1G)]:disk limit (e.g. 256M, 1024M, 1G):' \
+    '-m=[Memory limit (e.g. 256M, 1024M, 1G)]:memory limit (e.g. 256M, 1024M, 1G):' \
+    '-f[Force restart of app without prompt]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '--f[Force deletion without confirmation]' \
+    '--r[Also delete any mapped routes]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_rename() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:application name:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_start() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_stop() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_restart() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_restage() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_restart-app-instance() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:application index:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_events() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_files() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2::path:' \
+    '-i=[instance]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_logs() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '--recent[Dump recent logs instead of tailing]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_env() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_set-env() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:env var name:' \
+    '3:env var value:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_unset-env() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:env var name:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_stacks() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_stack() {
+  _arguments \
+    '1:stack name:__cf7_stacks' \
+    '--guid[Retrieve and display the given stack guid. All other output for the stack is suppressed]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_copy-source() {
+  _arguments \
+    '1:source application name:__cf7_apps' \
+    '2:target application name:' \
+    '-o=[Org that contains the target application]:organization name:__cf7_orgs' \
+    '-s=[Space that contains the target application]:space name:__cf7_spaces' \
+    '--no-restart[Override restart of the application in target environment after copy-source completes]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-app-manifest() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-p=[Specify a path for file creation. If path not specified, manifest file is created in current working directory]:path:_files' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_marketplace() {
+  _arguments \
+    '-s=[Show plan details for a particular service offering]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_services() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_service() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '--guid[Retrieve and display the given service guid. All other output for the service is suppressed]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-service() {
+  _arguments \
+    '1:service:__cf7_marketplace_services' \
+    '2:plan:' \
+    '3:service name:' \
+    '-c=[Valid JSON object containing service-specific configuration parameters, provided either in-line or in a file]' \
+    '-t=[User provided tags]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_update-service() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '-p=[Change service plan for a service instance]' \
+    '-c=[Valid JSON object containing service-specific configuration parameters, provided either in-line or in a file]' \
+    '-t=[User provided tags]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_rename-service() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '2:service name:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-service() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-service-key() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '2:service key:' \
+    '-c=[Valid JSON object containing service-specific configuration parameters, provided either in-line or in a file]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_service-keys() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_service-key() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '2:service key:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-service-key() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '2:service key:' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_bind-service() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:service name:__cf7_services' \
+    '-c=[Valid JSON object containing service-specific configuration parameters, provided either in-line or in a file]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_unbind-service() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:service name:__cf7_services' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-user-provided-service() {
+  _arguments \
+    '1:service name:' \
+    '-p=[Credentials]' \
+    '-l=[Syslog Drain Url]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_update-user-provided-service() {
+  _arguments \
+    '1:service name:__cf7_services' \
+    '-p=[Credentials]' \
+    '-l=[Syslog Drain Url]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_orgs() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_org() {
+  _arguments \
+    '1:organization name:__cf7_orgs' \
+    '--guid[Retrieve and display the given org guid. All other output for the org is suppressed]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-org() {
+  _arguments \
+    '1:organization name:' \
+    '-q=[Quota to assign to the newly created org (excluding this option results in assignment of default quota)]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-org() {
+  _arguments \
+    '1:organization name:__cf7_orgs' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_spaces() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_space() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '--guid[Retrieve and display the given space guid. All other output for the space is suppressed]' \
+    '--security-group-rules[Retrive the rules for all the security groups associated with the space]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-space() {
+  _arguments \
+    '1:space name:' \
+    '-o=[Org that contains the target application]:organization name:__cf7_orgs' \
+    '-q=[Quota to assign to the newly created space (excluding this option results in assignment of default quota)]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-space() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_domains() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-domain() {
+  _arguments \
+    '1:organization name:__cf7_orgs' \
+    '2:domain:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-domain() {
+  _arguments \
+    '1:domain:__cf7_domains' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-shared-domain() {
+  _arguments \
+    '1:domain:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-shared-domain() {
+  _arguments \
+    '1:domain:__cf7_shared_domains' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_routes() {
+  _arguments \
+    '--orglevel[List all the routes for all spaces of current organization]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-route() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '2:domain:__cf7_domains' \
+    '-n=[Hostname]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_check-route() {
+  _arguments \
+    '1:hostname:__cf7_hostnames' \
+    '2:domain:__cf7_domains' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_map-route() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:domain:__cf7_domains' \
+    '-n=[Hostname]:hostname:__cf7_hostnames:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_unmap-route() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '2:domain:__cf7_domains' \
+    '-n=[Hostname]:hostname:__cf7_hostnames:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-route() {
+  _arguments \
+    '1:domain:__cf7_domains' \
+    '-n=[Hostname]:hostname:__cf7_hostnames:' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-orphaned-routes() {
+  _arguments \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_buildpacks() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_create-buildpack() {
+  _arguments \
+    '1:buildpack name:' \
+    '2:path:_files' \
+    '3:position:' \
+    '--enable[Enable the buildpack to be used for staging]' \
+    '--disable[Disable the buildpack from being used for staging]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_update-buildpack() {
+  _arguments \
+    '1:buildpack name:__cf7_buildpacks' \
+    '-p=[Path to directory or zip file]:file:_files' \
+    '-i=[The order in which the buildpacks are checked during buildpack auto-detection]' \
+    '--enable[Enable the buildpack to be used for staging]' \
+    '--disable[Disable the buildpack from being used for staging]' \
+    '--lock[Lock the buildpack to prevent updates]' \
+    '--unlock[Unlock the buildpack to enable updates]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_rename-buildpack() {
+  _arguments \
+    '1:buildpack name:__cf7_buildpacks' \
+    '2:new buildpack name:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-buildpack() {
+  _arguments \
+    '1:buildpack name:__cf7_buildpacks' \
+    '-f[Force deletion without confirmation]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_running-environment-variable-group() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_staging-environment-variable-group() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_set-staging-environment-variable-group() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_set-running-environment-variable-group() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_feature-flags() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_feature-flag() {
+  _arguments \
+    '1:feature name:__cf7_feature_flags' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_enable-feature-flag() {
+  _arguments \
+    '1:feature name:__cf7_feature_flags' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_disable-feature-flag() {
+  _arguments \
+    '1:feature name:__cf7_feature_flags' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_curl() {
+  _arguments \
+    '1:path:' \
+    '-i[Include response headers in the output]' \
+    '-v[Enable CF_TRACE output for all requests and responses]' \
+    '-X=[HTTP method]:http method:(GET POST PUT DELETE)' \
+    '-h=[Custom headers to include in the request, flag can be specified multiple times]' \
+    '-d=[HTTP data to include in the request body]' \
+    '--output[Write curl body to FILE instead of stdout]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_config() {
+  _arguments \
+    '--async-timeout=[Timeout for async HTTP requests]' \
+    '--trace=[Trace HTTP requests]:trace:(true false)' \
+    '--color=[Enable or disable color]:color:(true false)' \
+    '--locale=[Set default locale. If LOCALE is CLEAR, previous locale is deleted]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_oauth-token() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_add-plugin-repo() {
+  _arguments \
+    '1:repo name:' \
+    '2:url:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_remove-plugin-repo() {
+  _arguments \
+    '1:repo name:__cf7_repo_plugins' \
+    '2:url:' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_list-plugin-repos() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_repo-plugins() {
+  _arguments \
+    '-r=[Repo Name]:repo name:__cf7_repo_plugins' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_plugins() {
+  _arguments \
+    '--checksum[Compute and show the sha1 value of the plugin binary file]' \
+    '--outdated[Search the plugin repositories for new versions of installed plugins]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_install-plugin() {
+  _arguments \
+    '1:plugin URL or path:_files' \
+    '-r=[repo name where the plugin binary is located]:repo name:__cf7_repo_plugins' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_uninstall-plugin() {
+  _arguments \
+    '1:plugin name:__cf7_plugins' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_save-target() {
+  _arguments \
+    '1:target-name:' \
+    '-f[Force save even if current target is already saved under another name]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_set-target() {
+  _arguments \
+    '1:target-name:__cf7_targets' \
+    '-f[Force target change even if current target is unsaved]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_delete-target() {
+  _arguments \
+    '1:target-name:__cf7_targets' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_version() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_allow-space-ssh() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+__cf7_cmd_disallow-space-ssh() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_enable-ssh() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_disable-ssh() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+# ------------------
+# ----- end Commands
+# ------------------
+
+# -------------------
+# ----- 1st Arguments
+# -------------------
+
+local -a _1st_arguments
+_1st_arguments=(
+  "login":"Log user in"
+  "logout":"Log user out"
+  "help":"Show CF command help"
+  "passwd":"Change user password"
+  "target":"Set or view the targeted org or space"
+  "api":"Set or view target api url"
+  "auth":"Authenticate user non-interactively"
+  "apps":"List all apps in the target space"
+  "app":"Display health and status for app"
+  "push":"Push a new app or sync changes to an existing app"
+  "scale":"Change or view the instance count, disk space limit, and memory limit for an app"
+  "delete":"Delete an app"
+  "rename":"Rename an app"
+  "start":"Start an app"
+  "stop":"Stop an app"
+  "restart":"Restart an app"
+  "restage":"Restage an app"
+  "restart-app-instance":"Terminate the running application Instance at the given index and instantiate a new instance of the application with the same index"
+  "events":"Show recent app events"
+  "files":"Print out a list of files in a directory or the contents of a specific file"
+  "logs":"Tail or show recent logs for an app"
+  "env":"Show all env variables for an app"
+  "set-env":"Set an env variable for an app"
+  "unset-env":"Remove an env variable"
+  "stacks":"List all stacks"
+  "stack":"Show information for a stack"
+  "copy-source":"Make a copy of app source code from one application to another.  Unless overridden, the copy-source command will restart the application"
+  "create-app-manifest":"Create an app manifest for an app that has been pushed successfully"
+  "marketplace":"List available offerings in the marketplace"
+  "services":"List all service instances in the target space"
+  "service":"Show service instance info"
+  "create-service":"Create a service instance"
+  "update-service":"Update a service instance"
+  "delete-service":"Delete a service instance"
+  "rename-service":"Rename a service instance"
+  "create-service-key":"Create key for a service instance"
+  "service-keys":"List keys for a service instance"
+  "service-key":"Show service key info"
+  "delete-service-key":"Delete a service key"
+  "bind-service":"Bind a service instance to an app"
+  "unbind-service":"Unbind a service instance from an app"
+  "create-user-provided-service":"Make a user-provided service instance available to cf apps"
+  "update-user-provided-service":"Update user-provided service instance name value pairs"
+  "orgs":"List all orgs"
+  "org":"Show org info"
+  "create-org":"Create an org"
+  "delete-org":"Delete an org"
+  "rename-org":"Rename an org"
+  "spaces":"List all spaces in an org"
+  "space":"Show space info"
+  "create-space":"Create a space"
+  "delete-space":"Delete a space"
+  "rename-space":"Rename a space"
+  "domains":"List domains in the target org"
+  "create-domain":"Create a domain in an org for later use"
+  "delete-domain":"Delete a domain"
+  "create-shared-domain":"Create a domain that can be used by all orgs (admin-only)"
+  "delete-shared-domain":"Delete a shared domain"
+  "routes":"List all routes in the current space or the current organization"
+  "create-route":"Create a url route in a space for later use"
+  "check-route":"Perform a simple check to determine whether a route currently exists or not"
+  "map-route":"Add a url route to an app"
+  "unmap-route":"Remove a url route from an app"
+  "delete-route":"Delete a route"
+  "delete-orphaned-routes":"Delete all orphaned routes (e.g.: those that are not mapped to an app)"
+  "buildpacks":"List all buildpacks"
+  "create-buildpack":"Create a buildpack"
+  "update-buildpack":"Update a buildpack"
+  "rename-buildpack":"Rename a buildpack"
+  "delete-buildpack":"Delete a buildpack"
+  "running-environment-variable-group":"Retrieve the contents of the running environment variable group"
+  "staging-environment-variable-group":"Retrieve the contents of the staging environment variable group"
+  "set-staging-environment-variable-group":"Pass parameters as JSON to create a staging environment variable group"
+  "set-running-environment-variable-group":"Pass parameters as JSON to create a running environment variable group"
+  "feature-flags":"Retrieve list of feature flags with status of each flag-able feature"
+  "feature-flag":"Retrieve an individual feature flag with status"
+  "enable-feature-flag":"Enable the use of a feature so that users have access to and can use the feature"
+  "disable-feature-flag":"Disable the use of a feature so that users have access to and can use the feature"
+  "curl":"Executes a raw request, content-type set to application/json by default"
+  "config":"write default values to the config"
+  "oauth-token":"Retrieve and display the OAuth token for the current session"
+  "add-plugin-repo":"Add a new plugin repository"
+  "remove-plugin-repo":"Remove a plugin repository"
+  "list-plugin-repos":"list all the added plugin repository"
+  "repo-plugins":"List all available plugins in all added repositories"
+  "plugins":"list all available plugin commands"
+  "install-plugin":"Install the plugin defined in command argument"
+  "uninstall-plugin":"Uninstall the plugin defined in command argument"
+  "targets":"List all saved targets (requires cf-targets plugin)"
+  "save-target":"Save the current target under a given name (requires cf-targets plugin)"
+  "set-target":"Restore a previously saved target (requires cf-targets plugin)"
+  "delete-target":"Delete a saved target (requires cf-targets plugin)" 
+  "version":"Show command version" 
+  "allow-space-ssh":"Allow SSH access for the space" 
+  "disallow-space-ssh":"Disallow SSH access for the space" 
+  "enable-ssh":"Enable ssh for the application" 
+  "disable-ssh":"Disable ssh for the application" 
+)
+
+# -----------------------
+# ----- end 1st Arguments
+# -----------------------
+#
+
+__commands() {
+  _describe -t commands "cf command" _1st_arguments
+}
+
+# ----------
+# ----- Main
+# ----------
+
+_arguments -C \
+  '-h[Show CF command help]' \
+  '-help[Show CF command help]' \
+  '--help[Show CF command help]' \
+  '-v[Print API request diagnostics to stdou]' \
+  '--version[Show command version]' \
+  '-v[Show command version]' \
+  '1: :__commands' \
+  '*::arg:->args'
+
+local -a _command_args
+case "$words[1]" in
+  login)
+    __cf7_cmd_login ;;
+  logout)
+    __cf7_cmd_logout ;;
+  passwd)
+    __cf7_cmd_passwd ;;
+  help)
+    __cf7_cmd_help ;;
+  target)
+    __cf7_cmd_target ;;
+  api)
+    __cf7_cmd_api ;;
+  auth)
+    __cf7_cmd_auth ;;
+  apps)
+    __cf7_cmd_apps ;;
+  app)
+    __cf7_cmd_app ;;
+  push)
+    __cf7_cmd_push ;;
+  scale)
+    __cf7_cmd_scale ;;
+  delete)
+    __cf7_cmd_delete ;;
+  rename)
+    __cf7_cmd_rename ;;
+  start)
+    __cf7_cmd_start ;;
+  stop)
+    __cf7_cmd_stop ;;
+  restart)
+    __cf7_cmd_restart ;;
+  restage)
+    __cf7_cmd_restage ;;
+  restart-app-instance)
+    __cf7_cmd_restart-app-instance ;;
+  events)
+    __cf7_cmd_events ;;
+  files)
+    __cf7_cmd_files ;;
+  logs)
+    __cf7_cmd_logs ;;
+  env)
+    __cf7_cmd_env ;;
+  set-env)
+    __cf7_cmd_set-env ;;
+  unset-env)
+    __cf7_cmd_unset-env ;;
+  stacks)
+    __cf7_cmd_stacks ;;
+  stack)
+    __cf7_cmd_stack ;;
+  copy-source)
+    __cf7_cmd_copy-source ;;
+  create-app-manifest)
+    __cf7_cmd_create-app-manifest ;;
+  marketplace)
+    __cf7_cmd_marketplace ;;
+  services)
+    __cf7_cmd_services ;;
+  service)
+    __cf7_cmd_service ;;
+  create-service)
+    __cf7_cmd_create-service ;;
+  update-service)
+    __cf7_cmd_update-service ;;
+  rename-service)
+    __cf7_cmd_rename-service ;;
+  delete-service)
+    __cf7_cmd_delete-service ;;
+  create-service-key)
+    __cf7_cmd_create-service-key ;;
+  service-keys)
+    __cf7_cmd_service-keys ;;
+  service-key)
+    __cf7_cmd_service-key ;;
+  delete-service-key)
+    __cf7_cmd_delete-service-key ;;
+  bind-service)
+    __cf7_cmd_bind-service ;;
+  unbind-service)
+    __cf7_cmd_unbind-service ;;
+  create-user-provided-service)
+    __cf7_cmd_create-user-provided-service ;;
+  update-user-provided-service)
+    __cf7_cmd_update-user-provided-service ;;
+  orgs)
+    __cf7_cmd_orgs ;;
+  org)
+    __cf7_cmd_org ;;
+  create-org)
+    __cf7_cmd_create-org ;;
+  delete-org)
+    __cf7_cmd_delete-org ;;
+  spaces)
+    __cf7_cmd_spaces ;;
+  space)
+    __cf7_cmd_space ;;
+  create-space)
+    __cf7_cmd_create-space ;;
+  delete-space)
+    __cf7_cmd_delete-space ;;
+  domains)
+    __cf7_cmd_domains ;;
+  create-domain)
+    __cf7_cmd_create-domain ;;
+  delete-domain)
+    __cf7_cmd_delete-domain ;;
+  create-shared-domain)
+    __cf7_cmd_create-shared-domain ;;
+  delete-shared-domain)
+    __cf7_cmd_delete-shared-domain ;;
+  routes)
+    __cf7_cmd_routes ;;
+  create-route)
+    __cf7_cmd_create-route ;;
+  check-route)
+    __cf7_cmd_check-route ;;
+  map-route)
+    __cf7_cmd_map-route ;;
+  unmap-route)
+    __cf7_cmd_unmap-route ;;
+  delete-route)
+    __cf7_cmd_delete-route ;;
+  delete-orphaned-routes)
+    __cf7_cmd_delete-orphaned-routes ;;
+  buildpacks)
+    __cf7_cmd_buildpacks ;;
+  create-buildpack)
+    __cf7_cmd_create-buildpack ;;
+  update-buildpack)
+    __cf7_cmd_update-buildpack ;;
+  rename-buildpack)
+    __cf7_cmd_rename-buildpack ;;
+  delete-buildpack)
+    __cf7_cmd_delete-buildpack ;;
+  running-environment-variable-group)
+    __cf7_cmd_running-environment-variable-group ;;
+  staging-environment-variable-group)
+    __cf7_cmd_staging-environment-variable-group ;;
+  set-staging-environment-variable-group)
+    __cf7_cmd_set-staging-environment-variable-group ;;
+  set-running-environment-variable-group)
+    __cf7_cmd_set-running-environment-variable-group ;;
+  feature-flags)
+    __cf7_cmd_feature-flags ;;
+  feature-flag)
+    __cf7_cmd_feature-flag ;;
+  enable-feature-flag)
+    __cf7_cmd_enable-feature-flag ;;
+  disable-feature-flag)
+    __cf7_cmd_disable-feature-flag ;;
+  curl)
+    __cf7_cmd_curl ;;
+  config)
+    __cf7_cmd_config ;;
+  oauth-token)
+    __cf7_cmd_oauth-token ;;
+  add-plugin-repo)
+    __cf7_cmd_add-plugin-repo ;;
+  remove-plugin-repo)
+    __cf7_cmd_remove-plugin-repo ;;
+  list-plugin-repos)
+    __cf7_cmd_list-plugin-repos ;;
+  repo-plugins)
+    __cf7_cmd_repo-plugins ;;
+  plugins)
+    __cf7_cmd_plugins ;;
+  install-plugin)
+    __cf7_cmd_install-plugin ;;
+  uninstall-plugin)
+    __cf7_cmd_uninstall-plugin ;;
+  save-target)
+    __cf7_cmd_save-target ;;
+  set-target)
+    __cf7_cmd_set-target ;;
+  delete-target)
+    __cf7_cmd_delete-target ;;
+  allow-space-ssh)
+    __cf7_cmd_allow-space-ssh ;;
+  disallow-space-ssh)
+    __cf7_cmd_disallow-space-ssh ;;
+  enable-ssh)
+    __cf7_cmd_enable-ssh ;;
+  disable-ssh)
+    __cf7_cmd_disable-ssh ;;
+esac
