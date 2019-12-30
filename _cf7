@@ -1010,6 +1010,29 @@ __cf7_cmd_disable-ssh() {
     '--help[Show CF command help]'
 }
 
+__cf7_cmd_ssh-code() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_space-ssh-allowed() {
+  _arguments \
+    '1:space name:__cf7_spaces' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_ssh-enabled() {
+  _arguments \
+    '1:application name:__cf7_apps' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
 # ------------------
 # ----- end Commands
 # ------------------
@@ -1117,6 +1140,9 @@ _1st_arguments=(
   "disallow-space-ssh":"Disallow SSH access for the space" 
   "enable-ssh":"Enable ssh for the application" 
   "disable-ssh":"Disable ssh for the application" 
+  "space-ssh-allowed":"Reports whether SSH is allowed in a space"
+  "ssh-code":"Get a one time password for ssh clients"
+  "ssh-enabled":"Reports whether SSH is enabled on an application container instance"
 )
 
 # -----------------------
@@ -1330,4 +1356,10 @@ case "$words[1]" in
     __cf7_cmd_enable-ssh ;;
   disable-ssh)
     __cf7_cmd_disable-ssh ;;
+  space-ssh-allowed)
+    __cf7_cmd_space-ssh-allowed ;;
+  ssh-code)
+    __cf7_cmd_ssh-code ;;
+  ssh-enabled)
+    __cf7_cmd_ssh-enabled ;;
 esac
