@@ -35,10 +35,12 @@
 # ----- Helper functions
 # ----------------------
 
+local CF_ALIAS=cf7
+
 # Output a selectable list of organizations
 __cf7_orgs() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf orgs | awk 'NR>3{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} orgs | awk 'NR>3{print $1}'))
     if [[ 'X$cont_cmd' != 'X' ]]
         _describe 'ORG' cont_cmd
 }
@@ -46,7 +48,7 @@ __cf7_orgs() {
 # Output a selectable list of spaces
 __cf7_spaces() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf spaces | awk 'NR>3{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} spaces | awk 'NR>3{print $1}'))
     if [[ 'X$cont_cmd' != 'X' ]]
         _describe 'SPACE' cont_cmd
 }
@@ -54,7 +56,7 @@ __cf7_spaces() {
 # Output a selectable list of applications
 __cf7_apps() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf apps | awk 'NR>4{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} apps | awk 'NR>4{print $1}'))
     if [[ 'X$cont_cmd' != 'X' ]]
         _describe 'APP' cont_cmd
 }
@@ -62,7 +64,7 @@ __cf7_apps() {
 # Output a selectable list of stacks
 __cf7_stacks() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf stacks | awk 'NR>4{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} stacks | awk 'NR>4{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'STACK' cont_cmd
 }
@@ -70,7 +72,7 @@ __cf7_stacks() {
 # Output a selectable list of services
 __cf7_marketplace_services() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf marketplace | awk 'NR>4{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} marketplace | awk 'NR>4{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'SERVICE' cont_cmd
 }
@@ -78,7 +80,7 @@ __cf7_marketplace_services() {
 # Output a selectable list of services
 __cf7_services() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf services | awk 'NR>4{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} services | awk 'NR>4{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'SERVICE' cont_cmd
 }
@@ -86,7 +88,7 @@ __cf7_services() {
 # Output a selectable list of domains
 __cf7_domains() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf domains | grep -v shared | awk 'NR>2{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v shared | awk 'NR>2{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'DOMAIN' cont_cmd
 }
@@ -94,7 +96,7 @@ __cf7_domains() {
 # Output a selectable list of shared domains
 __cf7_shared_domains() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf domains | grep -v owned | awk 'NR>2{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v owned | awk 'NR>2{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'SHARED-DOMAIN' cont_cmd
 }
@@ -102,7 +104,7 @@ __cf7_shared_domains() {
 # Output a selectable list of hostnames
 __cf7_hostnames() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf routes | awk 'NR>3{print $2}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} routes | awk 'NR>3{print $2}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'ROUTE' cont_cmd
 }
@@ -110,7 +112,7 @@ __cf7_hostnames() {
 # Output a selectable list of buildpacks
 __cf7_buildpacks() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf buildpacks | awk 'NR>3{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} buildpacks | awk 'NR>3{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'BUILDPACK' cont_cmd
 }
@@ -118,7 +120,7 @@ __cf7_buildpacks() {
 # Output a selectable list of feature flags
 __cf7_feature_flags() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf feature-flags | awk 'NR>4{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} feature-flags | awk 'NR>4{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'FEATURE-FLAG' cont_cmd
 }
@@ -126,7 +128,7 @@ __cf7_feature_flags() {
 # Output a selectable list of plugin repos
 __cf7_repo_plugins() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false cf list-plugin-repos | awk 'NR>3{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} list-plugin-repos | awk 'NR>3{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'REPO-PLUGIN' cont_cmd
 }
@@ -134,7 +136,7 @@ __cf7_repo_plugins() {
 # Output a selectable list of plugins
 __cf7_plugins() {
     declare -a cont_cmd
-    cont_cmd=($(cf plugins | awk 'NR>4{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} plugins | awk 'NR>4{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'PLUGIN' cont_cmd
 }
@@ -142,7 +144,7 @@ __cf7_plugins() {
 # Output a selectable list of targets (requires cf-targets plugin)
 __cf7_targets() {
     declare -a cont_cmd
-    cont_cmd=($(cf targets | awk '{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} targets | awk '{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'TARGET' cont_cmd
 }
@@ -215,6 +217,8 @@ __cf7_cmd_api() {
 
 __cf7_cmd_auth() {
   _arguments \
+    '--client-credentials[iUse (non-user(client credentials) service account]' \
+    '--origin[Indicates the identity provider to be used for authentication]:Identity Provider:()' \
     '-h[Show CF command help]' \
     '-help[Show CF command help]' \
     '--help[Show CF command help]'
