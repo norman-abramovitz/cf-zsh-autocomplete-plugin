@@ -36,6 +36,7 @@
 # ----------------------
 
 local CF_ALIAS=cf7
+local CF_VERSION=V7
 
 # Output a selectable list of organizations
 __cf7_orgs() {
@@ -56,7 +57,9 @@ __cf7_spaces() {
 # Output a selectable list of applications
 __cf7_apps() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} apps | awk 'NR>4{print $1}'))
+    declare -i skip_rows=4
+    [[ "$CF_VERSION" == "V7" ]] && (( skip_rows-=1 ))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} apps | awk -v "skip=${skip_rows}" 'NR>skip{print $1}'))
     if [[ 'X$cont_cmd' != 'X' ]]
         _describe 'APP' cont_cmd
 }
@@ -64,7 +67,9 @@ __cf7_apps() {
 # Output a selectable list of stacks
 __cf7_stacks() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} stacks | awk 'NR>4{print $1}'))
+    declare -i skip_rows=4
+    [[ "$CF_VERSION" == "V7" ]] && (( skip_rows-=1 ))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} stacks | awk -v "skip=${skip_rows}" 'NR>skip{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'STACK' cont_cmd
 }
@@ -88,7 +93,9 @@ __cf7_services() {
 # Output a selectable list of domains
 __cf7_domains() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v shared | awk 'NR>2{print $1}'))
+    declare -i skip_rows=2
+    [[ "$CF_VERSION" == "V7" ]] && (( skip_rows+=1 ))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v  " shared " | awk -v "skip=${skip_rows}" 'NR>skip{print $1}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'DOMAIN' cont_cmd
 }
@@ -96,10 +103,14 @@ __cf7_domains() {
 # Output a selectable list of shared domains
 __cf7_shared_domains() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v owned | awk 'NR>2{print $1}'))
+    declare -i skip_rows=2
+    declare domain_type="owned"
+    [[ "$CF_VERSION" == "V7" ]] && (( skip_rows+=1 ))
+    [[ "$CF_VERSION" == "V7" ]] && domain_type="private"
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v " ${domain_type} " | awk -v "skip=${skip_rows}" 'NR>skip{print $1}' ))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'SHARED-DOMAIN' cont_cmd
-}
+    }
 
 # Output a selectable list of hostnames
 __cf7_hostnames() {
@@ -112,7 +123,9 @@ __cf7_hostnames() {
 # Output a selectable list of buildpacks
 __cf7_buildpacks() {
     declare -a cont_cmd
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} buildpacks | awk 'NR>3{print $1}'))
+    declare -i column=1
+    [[ "$CF_VERSION" == "V7" ]] && (( column=2 ))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} buildpacks | awk 'NR>3{print $'"${column}"'}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'BUILDPACK' cont_cmd
 }
