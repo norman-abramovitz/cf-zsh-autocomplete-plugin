@@ -95,7 +95,7 @@ __cf7_domains() {
     declare -a cont_cmd
     declare -i skip_rows=2
     [[ "$CF_VERSION" == "V7" ]] && (( skip_rows+=1 ))
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v  " shared " | awk -v "skip=${skip_rows}" 'NR>skip{print $1}'))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | awk 'NR>'"${skip_rows}"'{if ($2!="shared") print $1;}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'DOMAIN' cont_cmd
 }
@@ -107,7 +107,7 @@ __cf7_shared_domains() {
     declare domain_type="owned"
     [[ "$CF_VERSION" == "V7" ]] && (( skip_rows+=1 ))
     [[ "$CF_VERSION" == "V7" ]] && domain_type="private"
-    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | grep -v " ${domain_type} " | awk -v "skip=${skip_rows}" 'NR>skip{print $1}' ))
+    cont_cmd=($(CF_COLOR=false CF_TRACE=false ${CF_ALIAS} domains | awk 'NR>'"${skip_rows}"'{if ($2!="'"${domain_type}"'") print $1;}'))
     if [[  'X$cont_cmd' != 'X' ]]
         _describe 'SHARED-DOMAIN' cont_cmd
     }
