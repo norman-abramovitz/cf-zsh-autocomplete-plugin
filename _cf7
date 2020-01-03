@@ -1046,6 +1046,20 @@ __cf7_cmd_ssh-enabled() {
     '--help[Show CF command help]'
 }
 
+__cf7_cmd_space-quotas() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_quotas() {
+  _arguments \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
 # ------------------
 # ----- end Commands
 # ------------------
@@ -1156,6 +1170,8 @@ _1st_arguments=(
   "space-ssh-allowed":"Reports whether SSH is allowed in a space"
   "ssh-code":"Get a one time password for ssh clients"
   "ssh-enabled":"Reports whether SSH is enabled on an application container instance"
+  "space-quotas":"List available space resource quotas"
+  "quotas":"List available usage quotas"
 )
 
 # -----------------------
@@ -1375,4 +1391,8 @@ case "$words[1]" in
     __cf7_cmd_ssh-code ;;
   ssh-enabled)
     __cf7_cmd_ssh-enabled ;;
+  space-quotas)
+    __cf7_cmd_space-quotas ;;
+  quotas)
+    __cf7_cmd_quotas ;;
 esac
