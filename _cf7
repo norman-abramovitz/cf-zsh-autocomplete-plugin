@@ -1060,6 +1060,24 @@ __cf7_cmd_quotas() {
     '--help[Show CF command help]'
 }
 
+__cf7_cmd_org-users() {
+  _arguments \
+    '1:organization name:__cf7_orgs' \
+    '-a[List all users in the org]' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
+__cf7_cmd_space-users() {
+  _arguments \
+    '1:organization name:__cf7_orgs' \
+    '2:space name:__cf7_spaces' \
+    '-h[Show CF command help]' \
+    '-help[Show CF command help]' \
+    '--help[Show CF command help]'
+}
+
 # ------------------
 # ----- end Commands
 # ------------------
@@ -1172,6 +1190,8 @@ _1st_arguments=(
   "ssh-enabled":"Reports whether SSH is enabled on an application container instance"
   "space-quotas":"List available space resource quotas"
   "quotas":"List available usage quotas"
+  "org-users":"Show org users by role"
+  "space-users":"Show space users by role"
 )
 
 # -----------------------
@@ -1395,4 +1415,8 @@ case "$words[1]" in
     __cf7_cmd_space-quotas ;;
   quotas)
     __cf7_cmd_quotas ;;
+  space-users)
+    __cf7_cmd_space-users ;;
+  org-users)
+    __cf7_cmd_org-users ;;
 esac
